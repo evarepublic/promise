@@ -1,7 +1,6 @@
-'use strict';
+"use strict";
 
 const output = document.getElementById("output");
-const urlPhotos = "https://jsonplaceholder.typicode.com/photos";
 
 const getData = (url) => {
   return new Promise((resolve, reject) => {
@@ -23,14 +22,23 @@ const getData = (url) => {
 };
 
 const outputPhotos = (data) => {
-  const random = Math.floor(Math.random() * data.length);
-  const obj = data[random];
-  output.innerHTML = `
-    <h4>${obj.title}</h4>
-    <img src="${obj.thumbnailUrl}" alt="${obj.title}">
-  `;
+  data.forEach((item) => {
+    output.insertAdjacentHTML(
+      "beforeend",
+      `
+      <h4>${item.title}</h4>
+      <img src="${item.thumbnailUrl}" alt="${item.title}">
+      `
+    );
+  });
 };
 
-getData(urlPhotos)
+const oneImg = getData("https://jsonplaceholder.typicode.com/photos/1"),
+  twoImg = getData("https://jsonplaceholder.typicode.com/photos/2");
+
+// oneImg.then(outputPhotos).catch((err) => console.log(err));
+// twoImg.then(outputPhotos).catch((err) => console.log(err));
+
+Promise.all([oneImg, twoImg])
   .then(outputPhotos)
   .catch((err) => console.log(err));
